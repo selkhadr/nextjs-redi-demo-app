@@ -10,21 +10,10 @@ export default function PostDetail({ post, comments, renderTime }) {
   const [clientTime, setClientTime] = useState(null);
 
   useEffect(() => {
-    // Measure client-side render time
     const startTime = performance.now();
     setClientTime(performance.now() - startTime);
   }, []);
 
-  // If the page is still generating via SSR
-  if (router.isFallback) {
-    return (
-      <Layout title="Loading...">
-        <div className="container">
-          <h1>Loading...</h1>
-        </div>
-      </Layout>
-    );
-  }
 
   return (
     <Layout title={post.title}>

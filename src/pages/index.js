@@ -8,7 +8,6 @@ export default function Home({ initialPosts, renderTime }) {
   const [clientTime, setClientTime] = useState(null);
 
   useEffect(() => {
-    // Measure client-side render time
     const startTime = performance.now();
     setClientTime(performance.now() - startTime);
   }, []);
@@ -49,11 +48,10 @@ export default function Home({ initialPosts, renderTime }) {
 export async function getServerSideProps() {
   const startTime = process.hrtime();
   
-  // Use cache helper with a TTL of 5 minutes (300 seconds)
   const posts = await fetchFromCache('all-posts', fetchPosts, 300);
   
   const endTime = process.hrtime(startTime);
-  const renderTime = endTime[0] * 1000 + endTime[1] / 1000000; // Convert to milliseconds
+  const renderTime = endTime[0] * 1000 + endTime[1] / 1000000;
   
   return {
     props: {
