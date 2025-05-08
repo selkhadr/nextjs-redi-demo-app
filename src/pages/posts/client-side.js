@@ -27,7 +27,7 @@ export default function ClientSidePosts() {
         setLoading(false);
       }
     }
-    
+
     loadPosts();
   }, []);
 
@@ -63,8 +63,8 @@ export default function ClientSidePosts() {
             <div key={post.id} className="post-card">
               <h2>{post.title}</h2>
               <p>{post.body.substring(0, 100)}...</p>
-              <Link href={`/posts/${post.id}`}>
-                <a className="view-button">View Details</a>
+              <Link href={`/posts/${post.id}`} className="view-button">
+                View Details
               </Link>
             </div>
           ))}
@@ -72,7 +72,7 @@ export default function ClientSidePosts() {
         
         <div className="navigation">
           <Link href="/">
-            <a className="nav-button">View Server-side Rendered Posts</a>
+            View Server-side Rendered Posts
           </Link>
         </div>
       </div>

@@ -29,16 +29,16 @@ export default function Home({ initialPosts, renderTime }) {
             <div key={post.id} className="post-card">
               <h2>{post.title}</h2>
               <p>{post.body.substring(0, 100)}...</p>
-              <Link href={`/posts/${post.id}`}>
-                <a className="view-button">View Details</a>
+              <Link href={`/posts/${post.id}`} className="view-button">
+                View Details
               </Link>
             </div>
           ))}
         </div>
         
         <div className="navigation">
-          <Link href="/posts/client-side">
-            <a className="nav-button">View Client-side Rendered Posts</a>
+          <Link href="/posts/client-side" className="nav-button">
+            View Client-side Rendered Posts
           </Link>
         </div>
       </div>

@@ -51,8 +51,8 @@ export default function PostDetail({ post, comments, renderTime }) {
           </div>
           
           <div className="navigation">
-            <Link href="/">
-              <a className="nav-button">Back to Posts</a>
+            <Link href="/" className="nav-button">
+              Back to Posts
             </Link>
           </div>
         </div>

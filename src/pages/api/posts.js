@@ -7,7 +7,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Use cache helper with a TTL of 5 minutes (300 seconds)
     const posts = await fetchFromCache('all-posts', fetchPosts, 300);
     
     res.status(200).json(posts);

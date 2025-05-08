@@ -9,18 +9,15 @@ export default async function handler(req, res) {
   try {
     const { id } = req.query;
 
-    // Validate the ID is a number
     if (!/^\d+$/.test(id)) {
       return res.status(400).json({ message: 'Invalid post ID' });
     }
 
-    // Use Promise.all to fetch post and comments in parallel with Redis caching
     const [post, comments] = await Promise.all([
-      fetchFromCache(`post-${id}`, () => fetchPost(id), 600), // TTL: 10 minutes
-      fetchFromCache(`post-${id}-comments`, () => fetchPostComments(id), 300) // TTL: 5 minutes
+      fetchFromCache(`post-${id}`, () => fetchPost(id), 600),
+      fetchFromCache(`post-${id}-comments`, () => fetchPostComments(id), 300)
     ]);
 
-    // Return combined data
     res.status(200).json({
       post,
       comments,
