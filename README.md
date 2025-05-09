@@ -17,8 +17,6 @@ Using **Docker** to manage Redis provides several advantages:
 - **Easy Cleanup**: Containers can be stopped or removed without affecting the host system.
 
 ## Setup Instructions
-## Install & Run the Project
-Instead of running each command manually, you can simply execute the setup.sh script:
 ### 1. Install Dependencies
 Run the following command in the project root directory to install the necessary dependencies:
 ```sh
