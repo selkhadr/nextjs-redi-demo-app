@@ -5,15 +5,8 @@ import { fetchFromCache } from '../../lib/redis';
 import { fetchPost, fetchPostComments } from '../../lib/fetch-posts';
 import Layout from '../../components/Layout.js';
 
-export default function PostDetail({ post, comments, renderTime }) {
+export default function PostDetail({ post, comments }) {
   const router = useRouter();
-  const [clientTime, setClientTime] = useState(null);
-
-  useEffect(() => {
-    const startTime = performance.now();
-    setClientTime(performance.now() - startTime);
-  }, []);
-
 
   return (
     <Layout title={post.title}>
@@ -21,12 +14,6 @@ export default function PostDetail({ post, comments, renderTime }) {
         <div className="post-detail">
           <h1>{post.title}</h1>
           <p className="post-body">{post.body}</p>
-          
-          <div className="performance-metrics">
-            <h3>Performance Metrics:</h3>
-            <p>Server-side render time: {renderTime.toFixed(2)} ms</p>
-            {clientTime && <p>Client-side hydration time: {clientTime.toFixed(2)} ms</p>}
-          </div>
           
           <div className="comments-section">
             <h2>Comments ({comments.length})</h2>
@@ -51,31 +38,23 @@ export default function PostDetail({ post, comments, renderTime }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const startTime = process.hrtime();
-  
   try {
     const { id } = params;
     
-    // Fetch post and comments in parallel with Redis caching
     const [post, comments] = await Promise.all([
-      fetchFromCache(`post-${id}`, () => fetchPost(id), 600), // TTL: 10 minutes
-      fetchFromCache(`post-${id}-comments`, () => fetchPostComments(id), 300) // TTL: 5 minutes
+      fetchFromCache(`post-${id}`, () => fetchPost(id), 600), 
+      fetchFromCache(`post-${id}-comments`, () => fetchPostComments(id), 300) 
     ]);
-    
-    const endTime = process.hrtime(startTime);
-    const renderTime = endTime[0] * 1000 + endTime[1] / 1000000; // Convert to milliseconds
     
     return {
       props: {
         post,
-        comments,
-        renderTime
+        comments
       }
     };
   } catch (error) {
     console.error(`Failed to fetch post details: ${error.message}`);
     
-    // Return not found page on error
     return {
       notFound: true
     };

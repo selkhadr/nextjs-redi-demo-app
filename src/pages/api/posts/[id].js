@@ -7,22 +7,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { id } = req.query;
+    const { id, bypassCache } = req.query;
 
     if (!/^\d+$/.test(id)) {
       return res.status(400).json({ message: 'Invalid post ID' });
     }
 
+    const shouldBypassCache = bypassCache === 'true';
+
     const [post, comments] = await Promise.all([
-      fetchFromCache(`post-${id}`, () => fetchPost(id), 600),
-      fetchFromCache(`post-${id}-comments`, () => fetchPostComments(id), 300)
+      shouldBypassCache 
+        ? fetchPost(id) 
+        : fetchFromCache(`post-${id}`, () => fetchPost(id), 600),
+
+      shouldBypassCache 
+        ? fetchPostComments(id) 
+        : fetchFromCache(`post-${id}-comments`, () => fetchPostComments(id), 300)
     ]);
 
     res.status(200).json({
       post,
       comments,
       _meta: {
-        cached: true,
+        cached: !shouldBypassCache,
         timestamp: new Date().toISOString()
       }
     });

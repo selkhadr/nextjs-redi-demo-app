@@ -1,13 +1,8 @@
-// scripts/benchmark.js
-// A simple script to benchmark the API with and without Redis caching
-
 const fetch = require('node-fetch');
 const Redis = require('ioredis');
 
-// Initialize Redis client for cleanup
 const redis = new Redis();
 
-// Configuration
 const API_BASE_URL = 'http://localhost:3000/api';
 const ITERATIONS = 10;
 const ENDPOINTS = [
@@ -31,7 +26,7 @@ async function measureResponse(url, iteration, withCache) {
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`);
     }
-    await response.json(); // Make sure to consume the response
+    await response.json(); 
     
     const end = process.hrtime(start);
     const timeInMs = (end[0] * 1000 + end[1] / 1000000).toFixed(2);
@@ -49,47 +44,41 @@ async function runBenchmark() {
     uncached: {},
     cached: {}
   };
-  
-  // First run - without cache
+
   console.log('\n--- RUNNING UNCACHED TESTS ---\n');
   await clearCache();
   
   for (const endpoint of ENDPOINTS) {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const uncachedUrl = `${API_BASE_URL}${endpoint}?bypassCache=true`; 
     results.uncached[endpoint] = [];
     
     for (let i = 0; i < ITERATIONS; i++) {
-      const time = await measureResponse(url, i, false);
+      const time = await measureResponse(uncachedUrl, i, false);
       if (time) results.uncached[endpoint].push(time);
       
-      // Small delay between requests
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   }
-  
-  // Second run - with cache
+
   console.log('\n--- RUNNING CACHED TESTS ---\n');
-  // First request will populate the cache
+  
   for (const endpoint of ENDPOINTS) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    await fetch(url); // Warm up the cache
+    const cachedUrl = `${API_BASE_URL}${endpoint}`;
+    await fetch(cachedUrl);
   }
   
-  // Then measure with cache
   for (const endpoint of ENDPOINTS) {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const cachedUrl = `${API_BASE_URL}${endpoint}`;
     results.cached[endpoint] = [];
     
     for (let i = 0; i < ITERATIONS; i++) {
-      const time = await measureResponse(url, i, true);
+      const time = await measureResponse(cachedUrl, i, true);
       if (time) results.cached[endpoint].push(time);
       
-      // Small delay between requests
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   }
-  
-  // Print summary
+
   console.log('\n--- BENCHMARK RESULTS ---\n');
   for (const endpoint of ENDPOINTS) {
     const uncachedAvg = results.uncached[endpoint].reduce((sum, time) => sum + time, 0) / results.uncached[endpoint].length;
@@ -102,11 +91,8 @@ async function runBenchmark() {
     console.log(`  Improvement: ${improvement}%`);
     console.log();
   }
-  
-  // Close Redis connection
+
   redis.disconnect();
 }
 
-// Run the benchmark
 runBenchmark().catch(console.error);
-

@@ -6,19 +6,16 @@ export default function ClientSidePosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [fetchTime, setFetchTime] = useState(null);
 
   useEffect(() => {
     async function loadPosts() {
       try {
-        const startTime = performance.now();
         const response = await fetch('/api/posts');
         if (!response.ok) {
           throw new Error('Failed to fetch posts');
         }
         const data = await response.json();
         setPosts(data);
-        setFetchTime(performance.now() - startTime);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -49,10 +46,7 @@ export default function ClientSidePosts() {
     <Layout title="Posts List - Client Rendered">
       <div className="container" style={{ backgroundColor: 'white', color: '#5e095e' }}>
         <h1>Posts List (Client-side Rendered)</h1>
-        <div className="performance-metrics" style={{ backgroundColor: '#dab1da', border: '1px solid #733b73', padding: '10px', marginBottom: '20px' }}>
-          <h3>Performance Metrics:</h3>
-          <p>Client-side fetch time: {fetchTime.toFixed(2)} ms</p>
-        </div>
+
         <div className="posts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
           {posts.slice(0, 10).map(post => (
             <div key={post.id} className="post-card" style={{
@@ -81,6 +75,7 @@ export default function ClientSidePosts() {
             </div>
           ))}
         </div>
+
         <div className="navigation" style={{ marginTop: '30px', textAlign: 'center' }}>
           <Link href="/">
             <span style={{
