@@ -9,6 +9,13 @@ Ensure you have the following installed on your system:
 - [Docker](https://www.docker.com/get-started) & Docker Compose
 - Redis (if running locally outside Docker)
 
+## Why Use Docker for Redis?
+Using **Docker** to manage Redis provides several advantages:
+- **Consistency**: Ensures Redis runs in a reproducible environment across different machines.
+- **Isolation**: Prevents conflicts with other local Redis installations.
+- **Simplified Setup**: Eliminates the need to manually install Redis—just run `docker-compose up -d`.
+- **Easy Cleanup**: Containers can be stopped or removed without affecting the host system.
+
 ## Setup Instructions
 
 ### 1. Install Dependencies
