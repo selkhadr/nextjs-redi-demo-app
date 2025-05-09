@@ -45,7 +45,7 @@ export default function ClientSidePosts() {
   return (
     <Layout title="Posts List - Client Rendered">
       <div className="container" style={{ backgroundColor: 'white', color: '#5e095e' }}>
-        <h1>Posts List (Client-side Rendered)</h1>
+        <h1 style={{ color: 'black' }}>Posts List (Client-side Rendered)</h1>
 
         <div className="posts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
           {posts.slice(0, 10).map(post => (
@@ -75,18 +75,26 @@ export default function ClientSidePosts() {
             </div>
           ))}
         </div>
-
         <div className="navigation" style={{ marginTop: '30px', textAlign: 'center' }}>
           <Link href="/">
             <span style={{
-              color: '#ffadff',
-              textDecoration: 'underline',
-              fontWeight: 'bold'
-            }}>
+              display: 'inline-block',
+              backgroundColor: '#5e095e',
+              color: 'white',
+              padding: '12px 20px',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.2s ease, transform 0.2s ease'
+            }}
+            onMouseOver={(e) => { e.target.style.backgroundColor = '#733b73'; e.target.style.transform = 'scale(1.05)'; }}
+            onMouseOut={(e) => { e.target.style.backgroundColor = '#5e095e'; e.target.style.transform = 'scale(1)'; }}>
               View Server-side Rendered Posts
             </span>
           </Link>
         </div>
+
       </div>
     </Layout>
   );

@@ -11,7 +11,7 @@ export default function Layout({ children, title = 'Next.js Redis Demo' }) {
       
       <header>
         <div className="container">
-          <h1 className="site-title">Next.js + Redis Demo</h1>
+          <h1 className="site-title" style={{ color: 'black' }}>Next.js + Redis Demo</h1>
         </div>
       </header>
       
@@ -19,7 +19,7 @@ export default function Layout({ children, title = 'Next.js Redis Demo' }) {
       
       <footer>
         <div className="container">
-          <p>Next.js Application with Redis Integration - Technical Test</p>
+          <p style={{ color: 'black' }}>Next.js Application with Redis Integration - Technical Test</p>
         </div>
       </footer>
     </>
